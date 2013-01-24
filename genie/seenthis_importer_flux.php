@@ -1,7 +1,7 @@
 <?php
 
 function seenthis_importer_flux_taches_generales_cron($taches_generales){
-	$taches_generales['seenthis_importer_flux'] = 60;
+	$taches_generales['seenthis_importer_flux'] = 3;
 
 	return $taches_generales;
 }
@@ -37,6 +37,12 @@ function genie_seenthis_importer_flux($t){
 
 function seenthis_importer_rss_article($article, $moi) {
 	$url = $article['url'];
+
+	# fixer les URLs de 'pmo'
+	$url = preg_replace(
+		',^(http://www.piecesetmaindoeuvre.com/)spip.php\?article(\d+),',
+		'\1spip.php?page=resume&id_article=\2', $url);
+
 
 	# si l'url pointe un message local, il faut fav
 	if (preg_match(',^https?://('
@@ -76,7 +82,7 @@ function seenthis_importer_rss_article($article, $moi) {
 	if (!$id_me) {
 		include_spip('inc/uuid');
 		$uuid = UUID::getuuid($moi.$url);
-		$message = $article['titre']."\n".$url;
+		$message = $article['titre']."\n".'[@@@@@@]';
 		if (strlen($desc = $article['descriptif'])
 		OR strlen($desc = $article['content'])) {
 			$desc = couper(supprimer_tags($desc),500);
@@ -84,22 +90,42 @@ function seenthis_importer_rss_article($article, $moi) {
 			$message .= "\n\n❝".$desc."❞";
 		}
 		if (is_array($article['tags'])) {
-			$tags = '';
+			$tags = array();
+			# tags a ignorer
+			$censure = explode(' ', 'internetactu internetactu2net fing MesInfos');
 			foreach ($article['tags'] as $tag) {
-				$tag = importer_charset(supprimer_tags($tag));
-				$tag = str_replace(' ', '_', $tag);
-				if (preg_match('/'.preg_quote($tag).'/i', $message)) {
-					$message = preg_replace('/(^|[^#])('.preg_quote($tag).')/i',
-						'$1#$2', $message, 1);
-				} else {
-					$tags .= '#'.$tag.' ';
+				$rel = extraire_attribut($tag, 'rel');
+				if (strstr(",tag,directory,", ",$rel,")
+				AND $tag = str_replace(' ', '_', supprimer_tags($tag))
+				AND !in_array($tag, $censure)
+				) {
+					$bt = '/\b'.str_replace('_', '[ _]', preg_quote($tag)).'\b/i';
+					if (preg_match($bt, $message))
+						$message = preg_replace($bt, '#'.$tag, $message, 1);
+					else
+						$tags[] = "#".$tag;
 				}
+				else
+				// les enclosures sont affichees sous forme de lien brut
+				if (strstr(",enclosure,external,", ",$rel,")
+				AND $href = extraire_attribut($tag, 'href'))
+					$tags[] = "\n".$href;
 			}
-			if ($tags)
-				$message .= "\n\n".trim($tags);
 		}
+		if ($tags) $message = trim($message."\n".trim(join(' ',$tags)));
+
+		$message = str_replace('[@@@@@@]', $url, $message);
+
+		$message = unicode_to_utf_8(
+			html_entity_decode(
+				preg_replace('/&([lg]t;)/S', '&amp;\1', charset2unicode($message)),
+				ENT_NOQUOTES, 'utf-8')
+		);
+
+
 		spip_log("creation $uuid $message",'flux');
-		instance_me($moi, $message,  $id_me=0, $id_parent=0, $id_dest=0, $ze_mot=0, $time="NOW()", $uuid);
+		if (strlen($message))
+			instance_me($moi, $message,  $id_me=0, $id_parent=0, $id_dest=0, $ze_mot=0, $time="NOW()", $uuid);
 		return 2;
 	}
 
