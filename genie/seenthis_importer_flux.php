@@ -38,15 +38,18 @@ function genie_seenthis_importer_flux($t){
 }
 
 function seenthis_importer_rss_article($article, $moi) {
-	$url = $article['url'];
+	$urlo = $article['url'];
 
 	# fixer les URLs
-	$url = sucrer_utm($url);
+	$urlo = sucrer_utm($urlo);
 
 	// 'pmo'
-	$url = preg_replace(
+	$urlo = preg_replace(
 		',^(http://www.piecesetmaindoeuvre.com/)spip.php\?article(\d+),',
-		'\1spip.php?page=resume&id_article=\2', $url);
+		'\1spip.php?page=resume&id_article=\2', $urlo);
+
+	// seenthis n'aime pas les / final :
+	$url = preg_replace(',/+$,', '', $urlo);
 
 	# si l'url pointe un message local, il faut fav
 	if (preg_match(',^https?://('
@@ -72,7 +75,7 @@ function seenthis_importer_rss_article($article, $moi) {
 		$s = sql_query('SELECT t.id_me,m.id_auteur
 		FROM spip_me_tags AS t
 		INNER JOIN spip_me AS m ON t.uuid=m.uuid'
-		.' WHERE tag='.sql_quote($article['url'])
+		.' WHERE tag='.sql_quote($url)
 		# todo : auteurs que je bloque / ou que je follow
 		# .' AND m.id_auteur NOT IN (0)'					
 		);
@@ -96,11 +99,11 @@ function seenthis_importer_rss_article($article, $moi) {
 		if (is_array($article['tags'])) {
 			$tags = array();
 			# tags a ignorer
-			$censure = explode(' ', 'internetactu internetactu2net fing MesInfos');
+			$censure = explode(' ', 'Cahier internetactu internetactu2net fing MesInfos');
 			foreach ($article['tags'] as $tag) {
 				$rel = extraire_attribut($tag, 'rel');
 				if (strstr(",tag,directory,", ",$rel,")
-				AND $tag = str_replace(' ', '_', supprimer_tags($tag))
+				AND $tag = preg_replace('/([ ()"]|&quot;)+/', '_', charset2unicode(supprimer_tags($tag)))
 				AND !in_array($tag, $censure)
 				) {
 					$bt = '/\b'.str_replace('_', '[ _]', preg_quote($tag)).'\b/i';
@@ -118,7 +121,7 @@ function seenthis_importer_rss_article($article, $moi) {
 		}
 		if ($tags) $message = trim($message."\n".trim(join(' ',$tags)));
 
-		$message = str_replace('[@@@@@@]', $url, $message);
+		$message = str_replace('[@@@@@@]', $urlo, $message);
 
 		$message = unicode_to_utf_8(
 			html_entity_decode(
