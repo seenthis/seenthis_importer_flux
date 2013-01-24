@@ -21,7 +21,6 @@ function genie_seenthis_importer_flux($t){
 		AND is_array($articles)
 		) {
 			$articles = array_slice($articles,0,5);
-			$check = array();
 			foreach ($articles as $article) {
 				$action = seenthis_importer_rss_article($article, $t['id_auteur']);
 				if ($action == 2) {
@@ -72,14 +71,18 @@ function seenthis_importer_rss_article($article, $moi) {
 		# qu'il ne reviennent bégayer...
 		# 2. si un lien existe et appartient à quelqu'un d'autre,
 		# on le partage, sauf si on a bloqué la personne
-		$s = sql_query('SELECT t.id_me,m.id_auteur
+		$q = 'SELECT t.id_me,m.id_auteur
 		FROM spip_me_tags AS t
 		INNER JOIN spip_me AS m ON t.uuid=m.uuid'
-		.' WHERE tag='.sql_quote($url)
-		# todo : auteurs que je bloque / ou que je follow
-		# .' AND m.id_auteur NOT IN (0)'					
-		);
-		if ($deja = sql_fetch($s)) {
+		.' WHERE tag='.sql_quote($url);
+		# auteurs que je bloque / ou que je follow
+		if ($block = sql_allfetsel('id_auteur', 'spip_me_block', 'id_block='.$moi)) {
+			$b = array();
+			foreach($block as $k)
+				$b[] = $k['id_auteur'];
+			$q .= ' AND '.sql_in('m.id_auteur', $b, 'NOT');
+		}
+		if ($deja = sql_fetch(sql_query($q))) {
 			# $deja = array (id_me => id_me, id_auteur => id_auteur)
 			$id_me = $deja['id_me'];
 		}
