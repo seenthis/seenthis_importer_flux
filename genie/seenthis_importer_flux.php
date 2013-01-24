@@ -1,12 +1,14 @@
 <?php
 
 function seenthis_importer_flux_taches_generales_cron($taches_generales){
-	$taches_generales['seenthis_importer_flux'] = 3;
+	$taches_generales['seenthis_importer_flux'] = 60;
 
 	return $taches_generales;
 }
 
 function genie_seenthis_importer_flux($t){
+	define('_SYNDICATION_DEREFERENCER_URL', true); // feedburner
+
 	$s = sql_query("SELECT id_auteur,login,rss, RAND() AS hasard FROM spip_auteurs WHERE rss>'' ORDER BY hasard LIMIT 1");
 
 	if ($t = sql_fetch($s)) {
@@ -38,11 +40,13 @@ function genie_seenthis_importer_flux($t){
 function seenthis_importer_rss_article($article, $moi) {
 	$url = $article['url'];
 
-	# fixer les URLs de 'pmo'
+	# fixer les URLs
+	$url = sucrer_utm($url);
+
+	// 'pmo'
 	$url = preg_replace(
 		',^(http://www.piecesetmaindoeuvre.com/)spip.php\?article(\d+),',
 		'\1spip.php?page=resume&id_article=\2', $url);
-
 
 	# si l'url pointe un message local, il faut fav
 	if (preg_match(',^https?://('
