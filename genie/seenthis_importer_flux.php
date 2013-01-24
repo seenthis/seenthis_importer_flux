@@ -141,18 +141,18 @@ function seenthis_importer_rss_article($article, $moi) {
 
 	// on a trouvé un message :
 	// s'il est a nous, ou si on l'a deja partage, ne rien faire
-	if ($id_me) {
-		$mess = sql_allfetsel('*', 'spip_me', "id_me=$id_me");
-		if ($mess[0]['id_auteur'] == $moi) {
-			spip_log("$id_me deja envoye par $moi ($url)", 'flux');
-			return 0;
-		}
-
-		$share = sql_allfetsel('*', 'spip_me_share', "id_me=$id_me AND id_auteur=$moi");
-		if (count($share)) {
-			spip_log("$id_me deja partage par $moi ($url)", 'flux');
-			return 0;
-		}
+	$mess = sql_allfetsel('*', 'spip_me', "id_me=$id_me");
+	if ($mess[0]['id_auteur'] == $moi) {
+		spip_log("$id_me deja envoye par $moi ($url)", 'flux');
+		return 0;
+	}
+	# si c'est dans une reponse, partager le parent
+	if ($mess[0]['id_parent'] > 0)
+		$id_me = $mess[0]['id_parent'];
+	$share = sql_allfetsel('*', 'spip_me_share', "id_me=$id_me AND id_auteur=$moi");
+	if (count($share)) {
+		spip_log("$id_me deja partage par $moi ($url)", 'flux');
+		return 0;
 	}
 
 	// sinon, ajouter un partage
