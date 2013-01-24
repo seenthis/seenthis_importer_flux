@@ -8,6 +8,11 @@
 	</description>
 	<prefix>seenthis_importer_flux</prefix>
 
+	<pipeline>
+		<nom>declarer_tables_principales</nom>
+		<inclure>base/seenthis_importer_flux.php</inclure>
+	</pipeline>
+
 	<version_base>1.0.0</version_base>
 	<install>base/seenthis_importer_flux.php</install>
 

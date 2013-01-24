@@ -20,10 +20,11 @@ function seenthis_importer_flux_install($action,$prefix,$version_cible){
 			return $ok;
 			break;
 		case 'install':
+			include_spip('base/create');
 			maj_tables(array(
 				'spip_auteurs',
 			));
-			ecrire_meta($nom_meta_base_version,
+			ecrire_meta($prefix."_base_version",
 				$current_version=$version_cible, 'non');
 			break;
 		case 'uninstall':
