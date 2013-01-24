@@ -1,0 +1,19 @@
+<plugin>
+	<nom>Seenthis Importer flux RSS des auteurs</nom>
+	<auteur>Fil</auteur>
+	<version>1.0</version>
+	<etat>stable</etat>
+	<description>
+		Importation de flux RSS par les auteurs de Seenthis
+	</description>
+	<prefix>seenthis_importer_flux</prefix>
+
+	<version_base>1.0.0</version_base>
+	<install>base/seenthis_importer_flux.php</install>
+
+	<pipeline>
+		<nom>taches_generales_cron</nom>
+		<inclure>genie/seenthis_importer_flux.php</inclure>
+	</pipeline>
+</plugin>
+
