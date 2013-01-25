@@ -1,6 +1,8 @@
 <?php
 
 function seenthis_importer_flux_taches_generales_cron($taches_generales){
+	// duree du cron a moduler en fonction du nombre de flux...
+	// pour le moment, on en prend un au hasard à chaque tour
 	$taches_generales['seenthis_importer_flux'] = 60;
 
 	return $taches_generales;
@@ -73,14 +75,13 @@ function seenthis_importer_rss_article($article, $moi) {
 		# on le partage, sauf si on a bloqué la personne
 		$q = 'SELECT t.id_me,m.id_auteur
 		FROM spip_me_tags AS t
-		INNER JOIN spip_me AS m ON t.uuid=m.uuid'
-		.' WHERE tag='.sql_quote($url);
+		INNER JOIN spip_me AS m ON t.uuid=m.uuid AND t.tag='.sql_quote($url);
 		# auteurs que je bloque / ou que je follow
 		if ($block = sql_allfetsel('id_auteur', 'spip_me_block', 'id_block='.$moi)) {
 			$b = array();
 			foreach($block as $k)
 				$b[] = $k['id_auteur'];
-			$q .= ' AND '.sql_in('m.id_auteur', $b, 'NOT');
+			$q .= ' WHERE '.sql_in('m.id_auteur', $b, 'NOT');
 		}
 		if ($deja = sql_fetch(sql_query($q))) {
 			# $deja = array (id_me => id_me, id_auteur => id_auteur)
@@ -92,6 +93,13 @@ function seenthis_importer_rss_article($article, $moi) {
 	if (!$id_me) {
 		include_spip('inc/uuid');
 		$uuid = UUID::getuuid($moi.$url);
+
+		# verifier si le message uuid n'a pas été effacé
+		if (sql_allfetsel('uuid','spip_me', 'uuid='.sql_quote($uuid))) {
+			spip_log("Message $uuid existant mais efface ($url)", 'flux');
+			return 0;
+		}
+
 		$message = $article['titre']."\n".'[@@@@@@]';
 		if (strlen($desc = $article['descriptif'])
 		OR strlen($desc = $article['content'])) {
@@ -102,7 +110,7 @@ function seenthis_importer_rss_article($article, $moi) {
 		if (is_array($article['tags'])) {
 			$tags = array();
 			# tags a ignorer
-			$censure = explode(' ', 'Cahier internetactu internetactu2net fing MesInfos');
+			$censure = explode(' ', 'Cahier internetactu internetactu2net fing MesInfos article_consultable');
 			foreach ($article['tags'] as $tag) {
 				$rel = extraire_attribut($tag, 'rel');
 				if (strstr(",tag,directory,", ",$rel,")
