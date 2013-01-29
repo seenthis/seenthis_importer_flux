@@ -114,7 +114,7 @@ function seenthis_importer_rss_article($article, $moi) {
 			foreach ($article['tags'] as $tag) {
 				$rel = extraire_attribut($tag, 'rel');
 				if (strstr(",tag,directory,", ",$rel,")
-				AND $tag = preg_replace('/([ ()"]|&quot;)+/', '_', charset2unicode(supprimer_tags($tag)))
+				AND $tag = seenthis_nettoyer_tag($tag)
 				AND !in_array($tag, $censure)
 				) {
 					$bt = '/\b'.str_replace('_', '[ _]', preg_quote($tag)).'\b/i';
@@ -168,6 +168,13 @@ function seenthis_importer_rss_article($article, $moi) {
 	sql_insertq('spip_me_share', array('id_me' => $id_me, 'id_auteur' => $moi, 'date' => 'NOW()'));
 	cache_me($id_me);
 	return 1;
+}
+
+function seenthis_nettoyer_tag($tag) {
+	$tag = unicode2charset(charset2unicode(supprimer_tags($tag)));
+	$tag = preg_replace('/&#0?39;/', "'", $tag);
+	$tag = preg_replace('/([ ()"]|&(quot|#.*?);)+/', '_', $tag);
+	return $tag;
 }
 
 ?>
