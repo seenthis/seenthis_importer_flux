@@ -18,7 +18,7 @@ function genie_seenthis_importer_flux($t){
 		include_spip('inc/syndic');
 		if ($url = $t['rss']
 		AND preg_match(',^https?://,', $url)
-		AND $rss = recuperer_page($url)
+		AND $rss = recuperer_page($url, $transcoder = true)
 		AND $articles = analyser_backend($rss)
 		AND is_array($articles)
 		) {
