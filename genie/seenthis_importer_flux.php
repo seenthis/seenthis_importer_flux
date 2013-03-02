@@ -103,10 +103,25 @@ function seenthis_importer_rss_article($article, $moi) {
 		$message = $article['titre']."\n".'[@@@@@@]';
 		if (strlen($desc = $article['descriptif'])
 		OR strlen($desc = $article['content'])) {
+
+			if (!$image
+			AND $img = extraire_balise($desc, 'img')
+			AND $img = extraire_attribut($img, 'src')
+			AND preg_match(',^https?://.*(jpe?g|gif|png)$,i', $img)) {
+				$image = $img;
+			}
+
 			$desc = couper(supprimer_tags($desc),500);
 			$desc = str_replace('&nbsp;', ' ', $desc);
-			$message .= "\n\n❝".$desc."❞";
+			$desc = preg_replace(',  +,', ' ', $desc);
 		}
+
+		if ($image)
+			$message .= "\n\n$image";
+
+		if ($desc)
+			$message .= "\n\n❝".$desc."❞";
+
 		if (is_array($article['tags'])) {
 			$tags = array();
 			# tags a ignorer
@@ -118,8 +133,10 @@ function seenthis_importer_rss_article($article, $moi) {
 				AND !in_array($tag, $censure)
 				) {
 					$bt = '/\b'.str_replace('_', '[ _]', preg_quote($tag)).'\b/i';
-					if (preg_match($bt, $message))
+					if (preg_match($bt, $message)) {
 						$message = preg_replace($bt, '#'.$tag, $message, 1);
+						$message = str_replace('##', '#', $message);
+					}
 					else
 						$tags[] = "#".$tag;
 				}
@@ -129,8 +146,16 @@ function seenthis_importer_rss_article($article, $moi) {
 				AND $href = extraire_attribut($tag, 'href'))
 					$tags[] = "\n".$href;
 			}
+			foreach (extraire_balises($article['enclosures'],'a') as $enc) {
+				$rel = extraire_attribut($enc, 'rel');
+				if (strstr(",enclosure,external,", ",$rel,")
+				AND $href = extraire_attribut($enc, 'href')
+				AND $href != $url # enclosure <> adresse de l'article
+				AND false === strpos($message, $href))  # enclosure n'est pas dans le descriptif
+					$tags[] = "\n".$href;
+			}
 		}
-		if ($tags) $message = trim($message."\n".trim(join(' ',$tags)));
+		if ($tags) $message = trim($message."\n".trim(join(' ',array_unique($tags))));
 
 		$message = str_replace('[@@@@@@]', $urlo, $message);
 
@@ -139,7 +164,6 @@ function seenthis_importer_rss_article($article, $moi) {
 				preg_replace('/&([lg]t;)/S', '&amp;\1', charset2unicode($message)),
 				ENT_NOQUOTES, 'utf-8')
 		);
-
 
 		spip_log("creation $uuid $message",'flux');
 		if (strlen($message))
