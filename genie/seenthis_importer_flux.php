@@ -22,9 +22,8 @@ function genie_seenthis_importer_flux($t){
 		AND $articles = analyser_backend($rss)
 		AND is_array($articles)
 		) {
-			$articles = array_slice($articles,0,5);
-			foreach ($articles as $article) {
-				$action = seenthis_importer_rss_article($article, $t['id_auteur']);
+			foreach (array_values($articles) as $k => $article) {
+				$action = seenthis_importer_rss_article($article, $t['id_auteur'], $create = ($k<5));
 				if ($action == 2) {
 					# creation d'un nouveau message : on sort
 					break;
@@ -38,7 +37,7 @@ function genie_seenthis_importer_flux($t){
 	return 1;
 }
 
-function seenthis_importer_rss_article($article, $moi) {
+function seenthis_importer_rss_article($article, $moi, $create=true) {
 	$urlo = $article['url'];
 
 	# fixer les URLs
@@ -91,6 +90,11 @@ function seenthis_importer_rss_article($article, $moi) {
 
 	# si rien, on cree
 	if (!$id_me) {
+		if (!$create) {
+			spip_log("Ne pas creer ($url)", 'flux');
+			return 0;
+		}
+
 		include_spip('inc/uuid');
 		$uuid = UUID::getuuid($moi.$url);
 
