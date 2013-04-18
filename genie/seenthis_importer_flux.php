@@ -112,16 +112,13 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 			AND $img = extraire_balise($desc, 'img')
 			AND $img = extraire_attribut($img, 'src')
 			AND preg_match(',^https?://.*(jpe?g|gif|png)$,i', $img)) {
-				$image = $img;
+				$image = str_replace(' ', '+', $img);
 			}
 
 			$desc = couper(supprimer_tags($desc),500);
 			$desc = str_replace('&nbsp;', ' ', $desc);
 			$desc = preg_replace(',  +,', ' ', $desc);
 		}
-
-		if ($image)
-			$message .= "\n\n$image";
 
 		if ($desc)
 			$message .= "\n\n❝".$desc."❞";
@@ -161,13 +158,22 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		}
 		if ($tags) $message = trim($message."\n".trim(join(' ',array_unique($tags))));
 
-		$message = str_replace('[@@@@@@]', $urlo, $message);
-
 		$message = unicode_to_utf_8(
 			html_entity_decode(
 				preg_replace('/&([lg]t;)/S', '&amp;\1', charset2unicode($message)),
 				ENT_NOQUOTES, 'utf-8')
 		);
+
+		$message = str_replace(
+			array('&#39;', '&#039;'),
+			array("'"    , "'"     ),
+			$message);
+
+		if ($image)
+			$urlo .= "\n\n$image";
+
+
+		$message = str_replace('[@@@@@@]', $urlo, $message);
 
 		spip_log("creation $uuid $message",'flux');
 		if (strlen($message))
