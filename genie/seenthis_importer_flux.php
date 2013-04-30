@@ -165,8 +165,8 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		);
 
 		$message = str_replace(
-			array('&#39;', '&#039;'),
-			array("'"    , "'"     ),
+			array('&#39;', '&#039;', '&#34;', '&#034;'),
+			array("'"    , "'"     , '"'    , '"'     ),
 			$message);
 
 		if ($image)
