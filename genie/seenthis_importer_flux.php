@@ -126,12 +126,12 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		if (is_array($article['tags'])) {
 			$tags = array();
 			# tags a ignorer
-			$censure = explode(' ', 'Cahier internetactu internetactu2net fing MesInfos article_consultable');
+			$censure = explode(' ', strtolower('Cahier internetactu internetactu2net fing MesInfos article_consultable FEATURED Latest'));
 			foreach ($article['tags'] as $tag) {
 				$rel = extraire_attribut($tag, 'rel');
 				if (strstr(",tag,directory,", ",$rel,")
 				AND $tag = seenthis_nettoyer_tag($tag)
-				AND !in_array($tag, $censure)
+				AND !in_array(strtolower($tag), $censure)
 				) {
 					$bt = '/\b'.str_replace('_', '[ _]', preg_quote($tag)).'\b/i';
 					if (preg_match($bt, $message)) {
