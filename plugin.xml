@@ -13,6 +13,12 @@
 		<inclure>base/seenthis_importer_flux.php</inclure>
 	</pipeline>
 
+	<pipeline>
+		<nom>declarer_champs_extras</nom>
+		<inclure>base/seenthis_importer_flux.php</inclure>
+	</pipeline>
+
+
 	<version_base>1.0.0</version_base>
 	<install>base/seenthis_importer_flux.php</install>
 
