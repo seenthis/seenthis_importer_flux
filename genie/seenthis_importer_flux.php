@@ -177,7 +177,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 
 		spip_log("creation $uuid $message",'flux');
 		if (strlen($message))
-			instance_me($moi, $message,  $id_me=0, $id_parent=0, $id_dest=0, $ze_mot=0, $time="NOW()", $uuid);
+			instance_me($moi, $message,  $id_me=0, $id_parent=0, $time="NOW()", $uuid);
 		return 2;
 	}
 
