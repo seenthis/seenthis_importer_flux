@@ -3,7 +3,7 @@
 function seenthis_importer_flux_taches_generales_cron($taches_generales){
 	// duree du cron a moduler en fonction du nombre de flux...
 	// pour le moment, on en prend un au hasard à chaque tour
-	$taches_generales['seenthis_importer_flux'] = 60;
+	$taches_generales['seenthis_importer_flux'] = 30;
 
 	return $taches_generales;
 }
@@ -22,15 +22,16 @@ function genie_seenthis_importer_flux($t){
 		AND $articles = analyser_backend($rss)
 		AND is_array($articles)
 		) {
+			spip_log("analyse RSS de $t[login] ($t[id_auteur]) : '$url'", 'flux');
 			foreach (array_values($articles) as $k => $article) {
-				$action = seenthis_importer_rss_article($article, $t['id_auteur'], $create = ($k<5));
+				$action = seenthis_importer_rss_article($article, $t, $create = ($k<5));
 				if ($action == 2) {
 					# creation d'un nouveau message : on sort
 					break;
 				}
 			}
 		} else {
-			spip_log("probleme avec le RSS '$url' de l'auteur $t[login]", 'flux');
+			spip_log("probleme avec le RSS '$url' de $t[login] ($t[id_auteur])", 'flux');
 		}
 	}
 
@@ -76,7 +77,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		FROM spip_me_tags AS t
 		INNER JOIN spip_me AS m ON t.uuid=m.uuid AND t.tag='.sql_quote($url);
 		# auteurs que je bloque / ou que je follow
-		if ($block = sql_allfetsel('id_auteur', 'spip_me_block', 'id_block='.$moi)) {
+		if ($block = sql_allfetsel('id_auteur', 'spip_me_block', 'id_block='.$moi['id_auteur'])) {
 			$b = array();
 			foreach($block as $k)
 				$b[] = $k['id_auteur'];
@@ -96,7 +97,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		}
 
 		include_spip('inc/uuid');
-		$uuid = UUID::getuuid($moi.$url);
+		$uuid = UUID::getuuid($moi['id_auteur'].$url);
 
 		# verifier si le message uuid n'a pas été effacé
 		if (sql_allfetsel('uuid','spip_me', 'uuid='.sql_quote($uuid))) {
@@ -126,7 +127,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		if (is_array($article['tags'])) {
 			$tags = array();
 			# tags a ignorer
-			$censure = explode(' ', strtolower('Cahier internetactu internetactu2net fing MesInfos article_consultable FEATURED Latest'));
+			$censure = explode(' ', strtolower('Cahier internetactu internetactu2net fing MesInfos article_consultable FEATURED Latest affichage_Une une'));
 			foreach ($article['tags'] as $tag) {
 				$rel = extraire_attribut($tag, 'rel');
 				if (strstr(",tag,directory,", ",$rel,")
@@ -177,29 +178,29 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 
 		spip_log("creation $uuid $message",'flux');
 		if (strlen($message))
-			instance_me($moi, $message,  $id_me=0, $id_parent=0, $time="NOW()", $uuid);
+			instance_me($moi['id_auteur'], $message,  $id_me=0, $id_parent=0, $time="NOW()", $uuid);
 		return 2;
 	}
 
 	// on a trouvé un message :
 	// s'il est a nous, ou si on l'a deja partage, ne rien faire
 	$mess = sql_allfetsel('*', 'spip_me', "id_me=$id_me");
-	if ($mess[0]['id_auteur'] == $moi) {
-		spip_log("$id_me deja envoye par $moi ($url)", 'flux');
+	if ($mess[0]['id_auteur'] == $moi['id_auteur']) {
+		spip_log("$id_me deja envoye par $moi[login] ($url)", 'flux');
 		return 0;
 	}
 	# si c'est dans une reponse, partager le parent
 	if ($mess[0]['id_parent'] > 0)
 		$id_me = $mess[0]['id_parent'];
-	$share = sql_allfetsel('*', 'spip_me_share', "id_me=$id_me AND id_auteur=$moi");
+	$share = sql_allfetsel('*', 'spip_me_share', "id_me=$id_me AND id_auteur=$moi[id_auteur]");
 	if (count($share)) {
-		spip_log("$id_me deja partage par $moi ($url)", 'flux');
+		spip_log("$id_me deja partage par $moi[login] ($url)", 'flux');
 		return 0;
 	}
 
 	// sinon, ajouter un partage
-	spip_log("$moi partage $id_me ($url)", 'flux');
-	sql_insertq('spip_me_share', array('id_me' => $id_me, 'id_auteur' => $moi, 'date' => 'NOW()'));
+	spip_log("$moi[login] partage $id_me ($url)", 'flux');
+	sql_insertq('spip_me_share', array('id_me' => $id_me, 'id_auteur' => $moi['id_auteur'], 'date' => 'NOW()'));
 	cache_me($id_me);
 	return 1;
 }
