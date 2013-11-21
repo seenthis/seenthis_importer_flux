@@ -116,7 +116,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 				$image = str_replace(' ', '+', $img);
 			}
 
-			$desc = couper(supprimer_tags($desc),500);
+			$desc = couper(supprimer_tags($desc),800);
 			$desc = str_replace('&nbsp;', ' ', $desc);
 			$desc = preg_replace(',  +,', ' ', $desc);
 		}
@@ -134,9 +134,9 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 				AND $tag = seenthis_nettoyer_tag($tag)
 				AND !in_array(strtolower($tag), $censure)
 				) {
-					$bt = '/\b'.str_replace('_', '[ _]', preg_quote($tag)).'\b/i';
+					$bt = '/(^|\s)'.str_replace('_', '[ _]', preg_quote($tag)).'\b/i';
 					if (preg_match($bt, $message)) {
-						$message = preg_replace($bt, '#'.$tag, $message, 1);
+						$message = preg_replace($bt, '\1#'.$tag, $message, 1);
 						$message = str_replace('##', '#', $message);
 					}
 					else
