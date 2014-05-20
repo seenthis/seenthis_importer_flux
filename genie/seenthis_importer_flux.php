@@ -3,7 +3,7 @@
 function seenthis_importer_flux_taches_generales_cron($taches_generales){
 	// duree du cron a moduler en fonction du nombre de flux...
 	// pour le moment, on en prend un au hasard à chaque tour
-	$taches_generales['seenthis_importer_flux'] = 30;
+	$taches_generales['seenthis_importer_flux'] = 10;
 
 	return $taches_generales;
 }
@@ -39,6 +39,8 @@ function genie_seenthis_importer_flux($t){
 }
 
 function seenthis_importer_rss_article($article, $moi, $create=true) {
+	include_spip('inc/charsets');
+
 	$urlo = $article['url'];
 
 	# fixer les URLs
@@ -127,12 +129,12 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		if (is_array($article['tags'])) {
 			$tags = array();
 			# tags a ignorer
-			$censure = explode(' ', strtolower('Cahier internetactu internetactu2net fing MesInfos article_consultable FEATURED Latest affichage_Une une'));
+			$censure = explode(' ', strtolower('Cahier internetactu internetactu2net fing MesInfos article_consultable FEATURED Latest affichage_Une une Tous_les_articles Top_News via_google_reader Les_plans_du_comptoir ACTUALITES a_la_une tw f t actualite'));
 			foreach ($article['tags'] as $tag) {
 				$rel = extraire_attribut($tag, 'rel');
 				if (strstr(",tag,directory,", ",$rel,")
 				AND $tag = seenthis_nettoyer_tag($tag)
-				AND !in_array(strtolower($tag), $censure)
+				AND !in_array(translitteration(mb_strtolower($tag)), $censure)
 				) {
 					$bt = '/(^|\s)'.str_replace('_', '[ _]', preg_quote($tag)).'\b/i';
 					if (preg_match($bt, $message)) {
