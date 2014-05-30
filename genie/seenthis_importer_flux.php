@@ -51,6 +51,13 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		',^(http://www.piecesetmaindoeuvre.com/)spip.php\?article(\d+),',
 		'\1spip.php?page=resume&id_article=\2', $urlo);
 
+	// 'friendfeed' :
+	// purger les tags et le content (recuperer uniquement l'image si existe)
+	if (false !== strpos($article['item'], '<id>tag:friendfeed.com,')) {
+		$article['content'] = join("\n",extraire_balises($article['content'], 'img'));
+		$article['tags'] = array();
+	}
+
 	// seenthis n'aime pas les / final :
 	$url = preg_replace(',/+$,', '', $urlo);
 
