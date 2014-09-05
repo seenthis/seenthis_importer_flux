@@ -125,9 +125,12 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 				$image = str_replace(' ', '+', $img);
 			}
 
-			$desc = couper(supprimer_tags($desc),800);
+			$desc = supprimer_tags($desc);
+			$desc = preg_replace(',The post .* appeared first on.*$,', '', $desc);
+			$desc = couper($desc,800);
 			$desc = str_replace('&nbsp;', ' ', $desc);
 			$desc = preg_replace(',  +,', ' ', $desc);
+
 		}
 
 		if ($desc)
