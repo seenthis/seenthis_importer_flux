@@ -213,7 +213,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 	// sinon, ajouter un partage
 	spip_log("$moi[login] partage $id_me ($url)", 'flux');
 	sql_insertq('spip_me_share', array('id_me' => $id_me, 'id_auteur' => $moi['id_auteur'], 'date' => 'NOW()'));
-	cache_me($id_me);
+	cache_message($id_me);
 	return 1;
 }
 
