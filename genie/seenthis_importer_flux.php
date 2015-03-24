@@ -139,7 +139,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		if (is_array($article['tags'])) {
 			$tags = array();
 			# tags a ignorer
-			$censure = explode(' ', strtolower('Cahier internetactu internetactu2net fing MesInfos article_consultable FEATURED Latest affichage_Une une Tous_les_articles Top_News via_google_reader Les_plans_du_comptoir ACTUALITES a_la_une tw f t actualite en_bref'));
+			$censure = explode(' ', strtolower('Cahier internetactu internetactu2net fing MesInfos article_consultable FEATURED Latest affichage_Une une Tous_les_articles Top_News via_google_reader Les_plans_du_comptoir ACTUALITES a_la_une tw f t actualite en_bref News_&_updates Tous_les_articles'));
 			foreach ($article['tags'] as $tag) {
 				$rel = extraire_attribut($tag, 'rel');
 				if (strstr(",tag,directory,", ",$rel,")
