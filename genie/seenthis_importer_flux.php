@@ -186,8 +186,8 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 			$urlo .= "\n\n$image";
 
 
-		// cas particulier : syndiquer seenthis.net sur une autre instance
-		if (preg_match(',^http://seenthis.net/messages/\d+$,', $url)) {
+		// cas particulier : syndiquer une instance de seenthis sur une autre
+		if (preg_match(',/messages/\d+$,', $url)) {
 			$message = $article['descriptif']."\n\n[@@@@@@]";
 			if ($via = trim(preg_replace('/[(]@[^()]+[)]/', '', $article['lesauteurs'])))
 				$message .= " via $via";
