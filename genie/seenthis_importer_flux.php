@@ -47,7 +47,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		$urls = array_merge($urls, $regs[0]);
 	}
 
-	foreach ($urls as $urlo) {
+	foreach ($urls as $i => $urlo) {
 		# fixer les URLs
 		$urlo = sucrer_utm($urlo);
 
@@ -103,9 +103,13 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 			}
 		}
 
+		$urls[$i] = $url; // $urls = tableau des urls nettoyees
+
 		// le premier URL qui trouve un message arrete la boucle
 		if ($id_me) break;
 	}
+
+	$url = $urls[0];
 
 	# si rien, on cree
 	if (!$id_me) {
@@ -122,7 +126,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 			return 0;
 		}
 
-		$message = seenthis_creer_message_local($article);
+		$message = seenthis_creer_message_local($article, $url);
 		spip_log("creation $uuid $message",'flux');
 		if (strlen($message)) {
 			instance_me($moi['id_auteur'], $message,  $id_me=0, $id_parent=0, $time="NOW()", $uuid);
@@ -155,13 +159,12 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 }
 
 
-function seenthis_creer_message_local($article) {
+function seenthis_creer_message_local($article, $url) {
 	$message = $article['titre']."\n".'[@@@@@@]';
 	if (strlen($desc = $article['descriptif'])
 	OR strlen($desc = $article['content'])) {
 
-		if (!$image
-		AND $img = extraire_balise($desc, 'img')
+		if ($img = extraire_balise($desc, 'img')
 		AND $img = extraire_attribut($img, 'src')
 		AND preg_match(',^https?://.*(jpe?g|gif|png)$,i', $img)) {
 			$image = str_replace(' ', '+', $img);
@@ -224,10 +227,6 @@ function seenthis_creer_message_local($article) {
 		array("'"    , "'"     , '"'    , '"'     ),
 		$message);
 
-	if ($image)
-		$urlo .= "\n\n$image";
-
-
 	// cas particulier : syndiquer une instance de seenthis sur une autre
 	if (preg_match(',/messages/\d+$,', $url)) {
 		$message = $article['descriptif']."\n\n[@@@@@@]";
@@ -235,7 +234,8 @@ function seenthis_creer_message_local($article) {
 			$message .= " via $via";
 	}
 
-	$message = str_replace('[@@@@@@]', $urlo, $message);
+	$lien = $url . ($image ? "\n\n" . $image : '');
+	$message = str_replace('[@@@@@@]', $lien, $message);
 
 	return $message;
 }
