@@ -171,7 +171,9 @@ function seenthis_creer_message_local($article, $url) {
 		}
 
 		$desc = supprimer_tags($desc);
-		$desc = preg_replace(',The post .* appeared first on.*$,', '', $desc);
+		$desc = preg_replace(',The post .* appeared first on.*$,', '', trim($desc));
+		$desc = preg_replace(',Cet article .* est apparu en premier sur .*$,', '', trim($desc));
+		$desc = preg_replace(',Continuer la lecture de .*$,', '', trim($desc));
 		$desc = couper($desc,800);
 		$desc = str_replace('&nbsp;', ' ', $desc);
 		$desc = preg_replace(',  +,', ' ', $desc);
