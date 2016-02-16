@@ -41,6 +41,11 @@ function genie_seenthis_importer_flux($t){
 function seenthis_importer_rss_article($article, $moi, $create=true) {
 	include_spip('inc/charsets');
 
+	// bloquer les pubs des flux delicious
+	if (strpos($article['url_source'],'delicious.com') AND $article['lesauteurs'] == 'delicious') {
+		return 0;
+	}
+
 	$urls = array($article['url']);
 
 	if (preg_match_all("/"._REG_URL."/ui", $article['content'], $regs)) {
