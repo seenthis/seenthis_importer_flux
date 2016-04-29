@@ -42,7 +42,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 	include_spip('inc/charsets');
 
 	// bloquer les pubs des flux delicious
-	if (strpos($article['url_source'],'delicious.com') AND $article['lesauteurs'] == 'delicious') {
+	if (strpos($article['url_source'],'del.icio.us') AND $article['lesauteurs'] == 'delicious') {
 		return 0;
 	}
 
