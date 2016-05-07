@@ -229,10 +229,8 @@ function seenthis_creer_message_local($article, $url) {
 			ENT_NOQUOTES, 'utf-8')
 	);
 
-	$message = str_replace(
-		array('&#39;', '&#039;', '&#34;', '&#034;'),
-		array("'"    , "'"     , '"'    , '"'     ),
-		$message);
+	// s'il reste des &#x27; &#39; &#34; &#039; &#034; etc
+	$message = preg_replace_callback("/(&#x?[0-9]+;)/i", function($m) { return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES"); }, $message); 
 
 	// cas particulier : syndiquer une instance de seenthis sur une autre
 	if (preg_match(',/messages/\d+$,', $url)) {
