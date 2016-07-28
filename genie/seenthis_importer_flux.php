@@ -4,8 +4,31 @@ function seenthis_importer_flux_taches_generales_cron($taches_generales){
 	// duree du cron a moduler en fonction du nombre de flux...
 	// pour le moment, on en prend un au hasard à chaque tour
 	$taches_generales['seenthis_importer_flux'] = 10;
+	// désactiver le flux des auteurs qui ne se sont pas logués depuis 6 mois
+	$taches_generales['seenthis_desactiver_flux'] = 10;
 
 	return $taches_generales;
+}
+
+function genie_seenthis_desactiver_flux($t){
+	define('_SEENTHIS_IMPORTER_FLUX_DELAI_INACTIF', 86400 * 31 * 6);
+
+	$mydate = sql_quote(date("Y-m-d H:i:s", time() - _SEENTHIS_IMPORTER_FLUX_DELAI_INACTIF));
+
+	$s = sql_query("SELECT id_auteur,login,en_ligne,email,rss FROM spip_auteurs WHERE rss > '' AND en_ligne < $mydate ORDER BY en_ligne DESC LIMIT 1");
+
+	if ($t = sql_fetch($s)) {
+		// ajouter une * au début de l'url du flux pour le désactiver
+		sql_updateq('spip_auteurs', array('rss' => '*' . $t['rss']),'id_auteur =' . $t['id_auteur'])
+		// envoyer un email à l'auteur pour le prévenir qu'on a désactivé son flux
+		$envoyer_mail = charger_fonction('envoyer_mail', 'inc');
+		$titre_mail = '';
+		$corps_mail = '';
+		$from = $GLOBALS['meta']['nom_site'] . " <no-reply@" . _HOST . ">";
+		$envoyer_mail($t['email'], $titre_mail, $corps_mail, $from);
+	}
+
+	return 1;
 }
 
 function genie_seenthis_importer_flux($t){
