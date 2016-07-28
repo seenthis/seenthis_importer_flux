@@ -21,11 +21,10 @@ function genie_seenthis_desactiver_flux($t){
 		// ajouter une * au début de l'url du flux pour le désactiver
 		sql_updateq('spip_auteurs', array('rss' => '*' . $t['rss']),'id_auteur =' . $t['id_auteur'])
 		// envoyer un email à l'auteur pour le prévenir qu'on a désactivé son flux
-		$envoyer_mail = charger_fonction('envoyer_mail', 'inc');
-		$titre_mail = '';
-		$corps_mail = '';
+		include_spip('inc/notifications');
+		$texte = recuperer_fond('notifications/flux_desactive', array('id_auteur'=>$t['id_auteur']))
 		$from = $GLOBALS['meta']['nom_site'] . " <no-reply@" . _HOST . ">";
-		$envoyer_mail($t['email'], $titre_mail, $corps_mail, $from);
+		notifications_envoyer_mails($t['email'], $texte, '', $from);
 	}
 
 	return 1;
