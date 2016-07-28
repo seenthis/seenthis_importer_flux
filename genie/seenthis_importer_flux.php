@@ -34,7 +34,7 @@ function genie_seenthis_desactiver_flux($t){
 function genie_seenthis_importer_flux($t){
 	define('_SYNDICATION_DEREFERENCER_URL', true); // feedburner
 
-	$s = sql_query("SELECT id_auteur,login,rss, RAND() AS hasard FROM spip_auteurs WHERE rss>'' ORDER BY hasard LIMIT 1");
+	$s = sql_query("SELECT id_auteur,login,rss, RAND() AS hasard FROM spip_auteurs WHERE rss>'' AND LEFT(rss,1) != '*' ORDER BY hasard LIMIT 1");
 
 	if ($t = sql_fetch($s)) {
 		include_spip('inc/distant');
