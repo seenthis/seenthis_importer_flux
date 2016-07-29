@@ -11,7 +11,9 @@ function seenthis_importer_flux_taches_generales_cron($taches_generales){
 }
 
 function genie_seenthis_desactiver_flux($t){
-	define('_SEENTHIS_IMPORTER_FLUX_DELAI_INACTIF', 86400 * 31 * 6);
+	if (!defined('_SEENTHIS_IMPORTER_FLUX_DELAI_INACTIF')) {
+		define('_SEENTHIS_IMPORTER_FLUX_DELAI_INACTIF', 86400 * 31 * 6);
+	}
 
 	$mydate = sql_quote(date("Y-m-d H:i:s", time() - _SEENTHIS_IMPORTER_FLUX_DELAI_INACTIF));
 
