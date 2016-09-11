@@ -24,7 +24,7 @@
 
 	<pipeline>
 		<nom>taches_generales_cron</nom>
-		<inclure>genie/seenthis_importer_flux_pipelines.php</inclure>
+		<inclure>seenthis_importer_flux_pipelines.php</inclure>
 	</pipeline>
 </plugin>
 
