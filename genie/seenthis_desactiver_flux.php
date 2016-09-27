@@ -11,7 +11,7 @@ function genie_seenthis_desactiver_flux($t){
 
 	$mydate = sql_quote(date("Y-m-d H:i:s", time() - _SEENTHIS_IMPORTER_FLUX_DELAI_INACTIF));
 
-	$s = sql_query("SELECT id_auteur,login,en_ligne,email,rss FROM spip_auteurs WHERE rss > '' AND en_ligne < $mydate ORDER BY en_ligne DESC LIMIT 1");
+	$s = sql_query("SELECT id_auteur,login,en_ligne,email,rss FROM spip_auteurs WHERE rss > '' AND LEFT(rss,1) != '*' AND en_ligne < $mydate ORDER BY en_ligne DESC LIMIT 1");
 
 	if ($t = sql_fetch($s)) {
 		spip_log("desactivation du flux RSS de ". $t['login'] . " (". $t['id_auteur'] .") : ". $t['rss'], 'flux');
