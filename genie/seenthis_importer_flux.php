@@ -6,10 +6,11 @@ if (!defined("_ECRIRE_INC_VERSION")) {
 
 function genie_seenthis_importer_flux($t){
 	define('_SYNDICATION_DEREFERENCER_URL', true); // feedburner
+	if (!defined('_IMPORT_FLUX_MULTIPLES')) define('_IMPORT_FLUX_MULTIPLES', 1);
 
-	$s = sql_query("SELECT id_auteur,login,rss, RAND() AS hasard FROM spip_auteurs WHERE rss>'' AND LEFT(rss,1) != '*' ORDER BY hasard LIMIT 1");
+	$s = sql_query("SELECT id_auteur,login,rss, RAND() AS hasard FROM spip_auteurs WHERE rss>'' AND LEFT(rss,1) != '*' ORDER BY hasard LIMIT " . _IMPORT_FLUX_MULTIPLES);
 
-	if ($t = sql_fetch($s)) {
+	while ($t = sql_fetch($s)) {
 		include_spip('inc/distant');
 		include_spip('inc/syndic');
 		if ($url = $t['rss']
