@@ -1,0 +1,22 @@
+<paquet
+	prefix="seenthis_importer_flux"
+	categorie="outil"
+	version="2.0.0"
+	etat="stable"
+	compatibilite="[3.0.0;3.1.*]"
+	schema="1.0.0"
+>
+
+	<nom>Seenthis Importer flux RSS des auteurs</nom>
+	<!-- Importation de flux RSS par les auteurs de Seenthis -->
+
+	<auteur>Fil</auteur>
+	<copyright>2018</copyright>
+	<licence>GPL v3</licence>
+
+	<necessite nom="cextras" compatibilite="[3.7.0;]" />
+
+	<pipeline nom="declarer_champs_extras" inclure="base/seenthis_importer_flux.php" />
+	<pipeline nom="taches_generales_cron" inclure="seenthis_importer_flux_pipelines.php" />
+
+</paquet>
