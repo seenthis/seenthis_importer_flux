@@ -2,9 +2,7 @@
 <BOUCLE_aut(AUTEURS){id_auteur}{tout}>
 <:seenthis:flux_desactive_titre{nom_site=#NOM_SITE_SPIP}|nettoyer_titre_email:>
 
-<:seenthis:flux_desactive_texte{nom=#NOM}:>
-
-#URL_SITE_SPIP/index.php?page=profil
+<:seenthis:flux_desactive_texte{nom=#NOM,url=#ENV{url}}:>
 
 </BOUCLE_aut>
 #FILTRE{supprimer_tags|filtrer_entites|trim}

@@ -16,10 +16,12 @@ function genie_seenthis_desactiver_flux($t){
 	if ($t = sql_fetch($s)) {
 		spip_log("desactivation du flux RSS de ". $t['login'] . " (". $t['id_auteur'] .") : ". $t['rss'], 'flux');
 		// ajouter une * au début de l'url du flux pour le désactiver
-		sql_updateq('spip_auteurs', array('rss' => '*' . $t['rss']),'id_auteur =' . $t['id_auteur']);
+		sql_updateq('spip_auteurs', array('rss' => '*' . $t['rss']), 'id_auteur =' . $t['id_auteur']);
+		// preparer le lien vers l'action de reactivation
+		$url = generer_action_auteur('seenthis_reactiver_flux', $t['id_auteur'], '', false, 0, true);
 		// envoyer un email à l'auteur pour le prévenir qu'on a désactivé son flux
 		include_spip('inc/notifications');
-		$texte = recuperer_fond('notifications/flux_desactive', array('id_auteur'=>$t['id_auteur']));
+		$texte = recuperer_fond('notifications/flux_desactive', array('id_auteur' => $t['id_auteur'], 'url' => $url));
 		notifications_envoyer_mails($t['email'], $texte);
 	}
 
