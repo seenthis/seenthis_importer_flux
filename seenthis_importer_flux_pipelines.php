@@ -13,9 +13,9 @@ function seenthis_importer_flux_taches_generales_cron($taches_generales){
 	}
 	// duree du cron a moduler en fonction du nombre de flux...
 	// pour le moment, on en prend un au hasard à chaque tour
-	$taches_generales['seenthis_importer_flux'] = _SEENTHIS_IMPORTER_FLUX_NB_IMPORTER;
+	$taches_generales['seenthis_importer_flux'] = _SEENTHIS_IMPORTER_FLUX_PERIODE_IMPORTER;
 	// désactiver le flux des auteurs qui ne se sont pas logués depuis 6 mois
-	$taches_generales['seenthis_desactiver_flux'] = _SEENTHIS_IMPORTER_FLUX_NB_DESACTIVER;
+	$taches_generales['seenthis_desactiver_flux'] = _SEENTHIS_IMPORTER_FLUX_PERIODE_DESACTIVER;
 
 	return $taches_generales;
 }
