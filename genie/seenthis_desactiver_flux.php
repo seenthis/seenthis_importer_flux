@@ -18,7 +18,9 @@ function genie_seenthis_desactiver_flux($t){
 		// ajouter une * au début de l'url du flux pour le désactiver
 		sql_updateq('spip_auteurs', array('rss' => '*' . $t['rss']), 'id_auteur =' . $t['id_auteur']);
 		// preparer le lien vers l'action de reactivation
-		$url = generer_action_auteur('seenthis_reactiver_flux', $t['id_auteur'], '', false, 0, true);
+		include_spip('inc/securiser_action');
+		$cle = calculer_cle_action('seenthis_reactiver_flux,' . $t['id_auteur']);
+		$url = generer_url_action('seenthis_reactiver_flux', "id_auteur=" . $t['id_auteur'] . "&cle=$cle", true, true);
 		// envoyer un email à l'auteur pour le prévenir qu'on a désactivé son flux
 		include_spip('inc/notifications');
 		$texte = recuperer_fond('notifications/flux_desactive', array('id_auteur' => $t['id_auteur'], 'url' => $url));
