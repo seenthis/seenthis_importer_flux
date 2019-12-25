@@ -89,9 +89,10 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 			# qu'il ne reviennent bégayer...
 			# 2. si un lien existe et appartient à quelqu'un d'autre,
 			# on le partage, sauf si on a bloqué la personne
+			$lien_flou = preg_replace(',^(https?://)?,i', '', $url)
 			$q = 'SELECT t.id_me,m.id_auteur
 			FROM spip_me_tags AS t
-			INNER JOIN spip_me AS m ON t.uuid=m.uuid AND t.tag='.sql_quote($url);
+			INNER JOIN spip_me AS m ON t.uuid=m.uuid AND t.tag LIKE '.sql_quote('%' . $lien_flou);
 			# auteurs que je bloque / ou que je follow
 			if ($block = sql_allfetsel('id_auteur', 'spip_me_block', 'id_block='.$moi['id_auteur'])) {
 				$b = array();
