@@ -13,7 +13,7 @@ function seenthis_importer_flux_upgrade($nom_meta_base_version,$version_cible){
 
 	// en 1.0.1, poser viarss=0
 	$maj['1.0.1'] = array(
-		array('maj_tables', array('spip_me')),
+		array('sql_alter',"TABLE spip_me ADD viarss tinyint(1) NOT NULL DEFAULT '0'"),
 	);
 
 	include_spip('base/upgrade');
