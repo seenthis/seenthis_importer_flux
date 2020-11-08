@@ -10,7 +10,12 @@ function seenthis_importer_flux_upgrade($nom_meta_base_version,$version_cible){
 	$maj = array();
 	
 	cextras_api_upgrade(seenthis_importer_flux_declarer_champs_extras(), $maj['create']);
-	
+
+	// en 1.0.1, poser viarss=0
+	$maj['1.0.1'] = array(
+		array('maj_tables', array('spip_me')),
+	);
+
 	include_spip('base/upgrade');
 	maj_plugin($nom_meta_base_version, $version_cible, $maj);
 }
