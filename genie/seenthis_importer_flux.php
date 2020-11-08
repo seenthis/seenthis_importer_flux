@@ -132,7 +132,7 @@ function seenthis_importer_rss_article($article, $moi, $create=true) {
 		$message = seenthis_creer_message_local($article, $url);
 		spip_log("creation $uuid $message",'flux');
 		if (strlen($message)) {
-			instance_me($moi['id_auteur'], $message,  $id_me=0, $id_parent=0, $time="NOW()", $uuid);
+			instance_me($moi['id_auteur'], $message,  $id_me=0, $id_parent=0, $time="NOW()", $uuid, 1);
 		}
 		return 2;
 
