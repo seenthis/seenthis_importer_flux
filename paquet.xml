@@ -1,7 +1,7 @@
 <paquet
 	prefix="seenthis_importer_flux"
 	categorie="outil"
-	version="2.0.1"
+	version="2.0.2"
 	etat="stable"
 	compatibilite="[3.0.0;3.2.*]"
 	schema="1.0.1"
@@ -14,6 +14,7 @@
 	<copyright>2018</copyright>
 	<licence>GPL v3</licence>
 
+	<necessite nom="seenthis" compatibilite="[2.3.4;]" />
 	<necessite nom="cextras" compatibilite="[3.7.0;]" />
 
 	<pipeline nom="declarer_champs_extras" inclure="base/seenthis_importer_flux.php" />
