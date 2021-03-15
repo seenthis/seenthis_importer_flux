@@ -1,7 +1,7 @@
 <paquet
 	prefix="seenthis_importer_flux"
 	categorie="outil"
-	version="2.0.2"
+	version="2.0.3"
 	etat="stable"
 	compatibilite="[3.0.0;3.2.*]"
 	schema="1.0.1"

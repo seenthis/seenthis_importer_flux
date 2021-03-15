@@ -8,7 +8,11 @@ include_spip('inc/meta');
 
 function seenthis_importer_flux_upgrade($nom_meta_base_version,$version_cible){
 	$maj = array();
-	
+
+	$maj['create'] = array(
+		array('sql_alter',"TABLE spip_me ADD viarss tinyint(1) NOT NULL DEFAULT '0'")
+	);
+
 	cextras_api_upgrade(seenthis_importer_flux_declarer_champs_extras(), $maj['create']);
 
 	// en 1.0.1, poser viarss=0
