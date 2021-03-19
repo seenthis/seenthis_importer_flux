@@ -28,11 +28,3 @@ function seenthis_importer_flux_declarer_champs_extras($champs = array()) {
 
 	return $champs;
 }
-
-function seenthis_importer_flux_declarer_tables_principales($tables_principales) {
-
-	$me = &$tables_principales['spip_auteurs'];
-	$me['field']['viarss'] = "tinyint(1) NOT NULL DEFAULT '0'";
-	
-	return $tables_principales;
-}
