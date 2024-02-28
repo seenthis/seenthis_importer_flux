@@ -1,10 +1,10 @@
 <?php
 
-if (!defined("_ECRIRE_INC_VERSION")) {
+if (!defined('_ECRIRE_INC_VERSION')) {
 	return;
 }
 
-function seenthis_importer_flux_taches_generales_cron($taches_generales){
+function seenthis_importer_flux_taches_generales_cron($taches_generales) {
 	if (!defined('_SEENTHIS_IMPORTER_FLUX_PERIODE_IMPORTER')) {
 		define('_SEENTHIS_IMPORTER_FLUX_PERIODE_IMPORTER', 10);
 	}
