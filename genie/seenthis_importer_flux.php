@@ -18,7 +18,8 @@ function genie_seenthis_importer_flux($t) {
 		if (
 			$url = $t['rss']
 			and preg_match(',^https?://,', $url)
-			and $rss = recuperer_page($url, $transcoder = true)
+			and $rss = recuperer_url($url, ['transcoder' => true])
+			and $rss = $rss['page']
 			and $articles = analyser_backend($rss)
 			and is_array($articles)
 		) {
