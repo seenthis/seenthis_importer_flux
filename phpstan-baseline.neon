@@ -146,7 +146,7 @@ parameters:
 			path: genie/seenthis_importer_flux.php
 
 		-
-			message: "#^Function recuperer_page not found\\.$#"
+			message: "#^Function recuperer_url not found\\.$#"
 			count: 1
 			path: genie/seenthis_importer_flux.php
 
@@ -207,6 +207,21 @@ parameters:
 
 		-
 			message: "#^Function unicode_to_utf_8 not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Variable \\$id_me might not be defined\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Variable \\$image might not be defined\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Variable \\$tags might not be defined\\.$#"
 			count: 1
 			path: genie/seenthis_importer_flux.php
 

@@ -1,10 +1,12 @@
 includes:
-    - phpstan-baseline.neon
+	- phpstan-baseline.neon
 
 parameters:
-    paths:
-        - .
-    excludePaths:
-        analyseAndScan:
-            - vendor
-    level: 0
+	paths:
+		- .
+	excludePaths:
+		analyseAndScan:
+			- vendor
+	level: 1
+	bootstrapFiles:
+		- phpstan-constants.php
