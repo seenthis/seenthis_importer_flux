@@ -54,6 +54,8 @@ function seenthis_importer_rss_article($article, $moi, $create = true) {
 	}
 
 	foreach ($urls as $i => $urlo) {
+		$id_me = 0;
+
 		# fixer les URLs
 		$urlo = sucrer_utm($urlo);
 
@@ -178,6 +180,7 @@ function seenthis_importer_rss_article($article, $moi, $create = true) {
 
 function seenthis_creer_message_local($article, $url) {
 	$message = $article['titre'] . "\n" . '[@@@@@@]';
+	$image = '';
 	if (
 		strlen($desc = $article['descriptif'])
 		or strlen($desc = $article['content'])
@@ -203,8 +206,8 @@ function seenthis_creer_message_local($article, $url) {
 		$message .= "\n\n❝" . $desc . '❞';
 	}
 
+	$tags = [];
 	if (is_array($article['tags'])) {
-		$tags = [];
 		# tags a ignorer
 		$censure = array_map('mb_strtolower', array_map('trim', file(find_in_path('tags_ignore.txt'))));
 		foreach ($article['tags'] as $tag) {
