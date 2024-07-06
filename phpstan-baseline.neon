@@ -211,21 +211,6 @@ parameters:
 			path: genie/seenthis_importer_flux.php
 
 		-
-			message: "#^Variable \\$id_me might not be defined\\.$#"
-			count: 1
-			path: genie/seenthis_importer_flux.php
-
-		-
-			message: "#^Variable \\$image might not be defined\\.$#"
-			count: 1
-			path: genie/seenthis_importer_flux.php
-
-		-
-			message: "#^Variable \\$tags might not be defined\\.$#"
-			count: 1
-			path: genie/seenthis_importer_flux.php
-
-		-
 			message: "#^Function cextras_api_upgrade not found\\.$#"
 			count: 1
 			path: seenthis_importer_flux_administrations.php
