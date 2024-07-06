@@ -1,0 +1,13 @@
+{
+    "name": "seenthis/importer-flux",
+    "description": "Importation de flux RSS par les auteurs de Seenthis",
+    "license": "GPL-3.0-or-later",
+    "type": "spip-plugin",
+    "authors": [
+        {
+            "name": "Fil",
+            "email": "fil@rezo.net"
+        }
+    ],
+    "require": {}
+}

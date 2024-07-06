@@ -1,0 +1,236 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Function _request not found\\.$#"
+			count: 2
+			path: action/seenthis_reactiver_flux.php
+
+		-
+			message: "#^Function include_spip not found\\.$#"
+			count: 2
+			path: action/seenthis_reactiver_flux.php
+
+		-
+			message: "#^Function minipres not found\\.$#"
+			count: 1
+			path: action/seenthis_reactiver_flux.php
+
+		-
+			message: "#^Function spip_log not found\\.$#"
+			count: 1
+			path: action/seenthis_reactiver_flux.php
+
+		-
+			message: "#^Function sql_fetch not found\\.$#"
+			count: 1
+			path: action/seenthis_reactiver_flux.php
+
+		-
+			message: "#^Function sql_query not found\\.$#"
+			count: 1
+			path: action/seenthis_reactiver_flux.php
+
+		-
+			message: "#^Function sql_updateq not found\\.$#"
+			count: 2
+			path: action/seenthis_reactiver_flux.php
+
+		-
+			message: "#^Function verifier_cle_action not found\\.$#"
+			count: 1
+			path: action/seenthis_reactiver_flux.php
+
+		-
+			message: "#^Function calculer_cle_action not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function generer_url_action not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function include_spip not found\\.$#"
+			count: 2
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function notifications_envoyer_mails not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function recuperer_fond not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function spip_log not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function sql_fetch not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function sql_query not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function sql_quote not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Function sql_updateq not found\\.$#"
+			count: 1
+			path: genie/seenthis_desactiver_flux.php
+
+		-
+			message: "#^Call to static method getuuid\\(\\) on an unknown class UUID\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function analyser_backend not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function cache_message not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function charset2unicode not found\\.$#"
+			count: 2
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function couper not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function extraire_attribut not found\\.$#"
+			count: 5
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function extraire_balise not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function extraire_balises not found\\.$#"
+			count: 2
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function find_in_path not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function include_spip not found\\.$#"
+			count: 4
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function instance_me not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function recuperer_page not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function spip_log not found\\.$#"
+			count: 9
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function sql_allfetsel not found\\.$#"
+			count: 4
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function sql_fetch not found\\.$#"
+			count: 2
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function sql_in not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function sql_insertq not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function sql_query not found\\.$#"
+			count: 2
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function sql_quote not found\\.$#"
+			count: 3
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function sucrer_utm not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function supprimer_tags not found\\.$#"
+			count: 2
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function translitteration not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function unicode2charset not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function unicode_to_utf_8 not found\\.$#"
+			count: 1
+			path: genie/seenthis_importer_flux.php
+
+		-
+			message: "#^Function cextras_api_upgrade not found\\.$#"
+			count: 1
+			path: seenthis_importer_flux_administrations.php
+
+		-
+			message: "#^Function cextras_api_vider_tables not found\\.$#"
+			count: 1
+			path: seenthis_importer_flux_administrations.php
+
+		-
+			message: "#^Function effacer_meta not found\\.$#"
+			count: 1
+			path: seenthis_importer_flux_administrations.php
+
+		-
+			message: "#^Function include_spip not found\\.$#"
+			count: 4
+			path: seenthis_importer_flux_administrations.php
+
+		-
+			message: "#^Function maj_plugin not found\\.$#"
+			count: 1
+			path: seenthis_importer_flux_administrations.php
