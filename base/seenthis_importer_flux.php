@@ -5,26 +5,28 @@
  *
  */
 
-if (!defined('_ECRIRE_INC_VERSION')) return;
+if (!defined('_ECRIRE_INC_VERSION')) {
+	return;
+}
 
-function seenthis_importer_flux_declarer_champs_extras($champs = array()) {
+function seenthis_importer_flux_declarer_champs_extras($champs = []) {
 
 	// Table : spip_auteurs
 	if (!is_array($champs['spip_auteurs'])) {
-		$champs['spip_auteurs'] = array();
+		$champs['spip_auteurs'] = [];
 	}
 
-	$champs['spip_auteurs']['rss'] = array (
+	$champs['spip_auteurs']['rss'] =  [
 		'saisie' => 'input',
-		'options' => array (
+		'options' =>  [
 			'nom' => 'rss',
 			'label' => 'RSS',
-			'sql' => "varchar(256) DEFAULT NULL",
+			'sql' => 'varchar(256) DEFAULT NULL',
 			'rechercher' => 1,
 			'obligatoire' => false,
 			'versionner' => true
-		)
-	);
+		]
+	];
 
 	return $champs;
 }

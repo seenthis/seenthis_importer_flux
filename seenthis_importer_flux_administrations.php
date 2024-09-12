@@ -1,13 +1,15 @@
 <?php
 
-if (!defined('_ECRIRE_INC_VERSION')) return;
+if (!defined('_ECRIRE_INC_VERSION')) {
+	return;
+}
 
 include_spip('inc/cextras');
 include_spip('base/seenthis_importer_flux');
 include_spip('inc/meta');
 
-function seenthis_importer_flux_upgrade($nom_meta_base_version,$version_cible){
-	$maj = array();
+function seenthis_importer_flux_upgrade($nom_meta_base_version, $version_cible) {
+	$maj = [];
 
 	cextras_api_upgrade(seenthis_importer_flux_declarer_champs_extras(), $maj['create']);
 
